@@ -1,3 +1,5 @@
+// MEC830-04 Project 1
+
 #include <Stepper.h>
 #include <Servo.h>
 
@@ -10,7 +12,8 @@ int angle =0;
 int event = 0;
 const int tolerance = 12;
 bool tracking = true;
-int event_wait_time = 500;  //<------change to adjust the servo more
+int event_wait_time = 250;  //<------change to adjust the servo more
+int lightTest;
 
 Servo servo;
 Stepper stepper = Stepper(2048,11,9,10,8);  //(IN1,IN3,IN2,IN4)
@@ -32,14 +35,14 @@ void loop() {
   Serial.print(event);
   event++;
   Serial.print(", S_Angle: "); 
-  Serial.print(angle);
+  Serial.println(angle);
 
   if (tracking = true) {
     if (analogRead(ldr1) - analogRead(ldr2) > tolerance){
-     // stepper.step(-step);
+      stepper.step(-step);
       Serial.println("  CCW");
     } else if (analogRead(ldr2) - analogRead(ldr1) > tolerance){
-    // stepper.step(step);
+     stepper.step(step);
       Serial.println("  CW");
     } else {
       event +=1;
@@ -68,28 +71,26 @@ void loop() {
 }
 
 int returnPitch(int angle){
-  int maxLi = analogRead(ldr1) + analogRead(ldr2);
+  int maxLi = 0;
   int maxPitch = angle;
   
    //test response with smaller stepps (5 and 10)
-  for (int i = 45; i <= 135; i += 5){
+  for (int i = 0; i <= 45; i += 5){
 
-    Serial.println("SERVO----------------------");
+    Serial.print("SERVO----------------------");
     servo.write(i);
-    
-    if ((analogRead(ldr1) + analogRead(ldr2)) > maxLi){
-      maxLi = analogRead(ldr1) + analogRead(ldr2);
+    Serial.println(i);
+  
+    lightTest=analogRead(ldr1) + analogRead(ldr2);
+    if ((lightTest) > maxLi){
+      maxLi = lightTest;
       maxPitch = i; 
       
     }
-    delay(50);
+    delay(100);
   }
 
-  if (maxPitch> 15){
-    maxPitch=15;
-  }else if (maxPitch <-90){
-    maxPitch=-90;
-  }
+  
 
   return maxPitch;
   
