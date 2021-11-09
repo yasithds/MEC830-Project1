@@ -1,4 +1,7 @@
 // MEC830-04 Project 1
+// Name: Yasith De Silva
+// ID: 500832543
+// Version: 2.0 (As per demo)
 
 #include <Stepper.h>
 #include <Servo.h>
