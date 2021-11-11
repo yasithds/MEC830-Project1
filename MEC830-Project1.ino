@@ -1,7 +1,7 @@
 // MEC830-04 Project 1
 // Name: Yasith De Silva
 // ID: 500832543
-// Version: 2.0 (As per demo)
+// Final Version (Nov 11)
 
 #include <Stepper.h>
 #include <Servo.h>
@@ -9,13 +9,14 @@
 const int ldr1 = A0;
 const int ldr2 = A1;
 
-const int step = 8;
+const int step = 8; // Step size
 
 int angle =0;
 int event = 0;
-const int tolerance = 12;
+
+const int tolerance = 12; //Tolerence between the two LDRs
 bool tracking = true;
-int event_wait_time = 250;  //<------change to adjust the servo more
+int event_wait_time = 250;  //Number of intervals before servo sweep
 int lightTest;
 
 Servo servo;
@@ -30,7 +31,7 @@ void setup() {
   pinMode(ldr1, INPUT);
   pinMode(ldr2, INPUT);
   
-  delay(2000);
+  delay(2000); // Buffer period for startup
 }
 
 void loop() {
@@ -48,8 +49,7 @@ void loop() {
      stepper.step(step);
       Serial.println("  CW");
     } else {
-      event +=1;
-        
+      event +=1;  
     }
 
   if (event > event_wait_time) {
@@ -60,7 +60,6 @@ void loop() {
     event=0; 
   }
 
-    
   } else if (tracking = false) {
      if (abs(analogRead(ldr1) - analogRead(ldr2)) > tolerance){
       event +=1;
@@ -92,8 +91,6 @@ int returnPitch(int angle){
     }
     delay(100);
   }
-
-  
 
   return maxPitch;
   
